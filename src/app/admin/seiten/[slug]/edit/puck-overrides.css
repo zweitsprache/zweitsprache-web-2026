@@ -1,0 +1,7 @@
+/* Override Puck's default font with Encode Sans */
+[class^="Puck"],
+[class*=" Puck"],
+[class^="puck-"],
+[class*=" puck-"] {
+  font-family: var(--font-encode-sans), sans-serif;
+}
