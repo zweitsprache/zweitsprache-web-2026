@@ -1,29 +1,33 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateWorkshop, deleteWorkshop } from "../../actions";
+import { updateCourse, deleteCourse } from "../../actions";
 
-export function EditWorkshopForm({
+export function EditCourseForm({
   id,
   title,
   subtitle,
   about,
+  coverImageUrl,
+  published,
 }: {
   id: string;
   title: string;
   subtitle?: string | null;
   about?: string | null;
+  coverImageUrl?: string | null;
+  published: boolean;
 }) {
   const [updateState, updateAction, isUpdating] = useActionState(
     async (_prev: { error?: string } | null, formData: FormData) => {
-      return (await updateWorkshop(id, formData)) ?? null;
+      return (await updateCourse(id, formData)) ?? null;
     },
     null
   );
 
   const [deleteState, deleteAction, isDeleting] = useActionState(
     async (_prev: { error?: string } | null, _formData: FormData) => {
-      return (await deleteWorkshop(id)) ?? null;
+      return (await deleteCourse(id)) ?? null;
     },
     null
   );
@@ -67,7 +71,7 @@ export function EditWorkshopForm({
             htmlFor="about"
             className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
           >
-            Über den Workshop
+            Beschreibung
           </label>
           <textarea
             id="about"
@@ -76,6 +80,37 @@ export function EditWorkshopForm({
             rows={6}
             className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
           />
+        </div>
+        <div>
+          <label
+            htmlFor="cover_image_url"
+            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
+            Cover-Bild URL
+          </label>
+          <input
+            id="cover_image_url"
+            type="text"
+            name="cover_image_url"
+            defaultValue={coverImageUrl ?? ""}
+            placeholder="https://..."
+            className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            id="published"
+            type="checkbox"
+            name="published"
+            defaultChecked={published}
+            className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700"
+          />
+          <label
+            htmlFor="published"
+            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
+            Veröffentlicht
+          </label>
         </div>
         <div className="flex gap-2">
           <button
@@ -86,7 +121,7 @@ export function EditWorkshopForm({
             {isUpdating ? "Speichern..." : "Speichern"}
           </button>
           <a
-            href={`/admin/workshops/${id}`}
+            href={`/admin/kurse/${id}`}
             className="rounded-md border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
           >
             Abbrechen
@@ -100,14 +135,14 @@ export function EditWorkshopForm({
       <hr className="border-zinc-200 dark:border-zinc-800" />
 
       <div>
-        <h2 className="mb-2 text-sm font-medium text-red-600">Gefahrenzone</h2>
+        <h2 className="mb-2 text-sm font-semibold text-red-600">Gefahrenzone</h2>
         <form action={deleteAction}>
           <button
             type="submit"
             disabled={isDeleting}
             className="rounded-md border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
           >
-            {isDeleting ? "Löschen..." : "Workshop löschen"}
+            {isDeleting ? "Löschen..." : "Kurs löschen"}
           </button>
         </form>
         {deleteState?.error && (

@@ -35,6 +35,7 @@ export default async function EditWorkshopPage({
         id={workshop.id}
         title={workshop.title}
         subtitle={workshop.subtitle}
+        about={workshop.about}
       />
     </div>
   );

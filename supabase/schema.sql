@@ -3,6 +3,7 @@ create table workshops (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   subtitle text,
+  about text,
   created_at timestamptz not null default now()
 );
 
@@ -22,15 +23,52 @@ create table termine (
   created_at timestamptz not null default now()
 );
 
+-- Lernziele table (children of Workshops, 1:n)
+create table lernziele (
+  id uuid primary key default gen_random_uuid(),
+  workshop_id uuid not null references workshops(id) on delete cascade,
+  text text not null,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+-- Inhalte table (children of Workshops, 1:n)
+create table inhalte (
+  id uuid primary key default gen_random_uuid(),
+  workshop_id uuid not null references workshops(id) on delete cascade,
+  text text not null,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+-- Voraussetzungen table (children of Workshops, 1:n)
+create table voraussetzungen (
+  id uuid primary key default gen_random_uuid(),
+  workshop_id uuid not null references workshops(id) on delete cascade,
+  text text not null,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
 -- Enable RLS
 alter table workshops enable row level security;
 alter table durchfuehrungen enable row level security;
 alter table termine enable row level security;
+alter table lernziele enable row level security;
+alter table inhalte enable row level security;
+alter table voraussetzungen enable row level security;
 
 -- Allow public read/write for now (adjust for auth later)
 create policy "Allow all on workshops" on workshops for all using (true) with check (true);
 create policy "Allow all on durchfuehrungen" on durchfuehrungen for all using (true) with check (true);
 create policy "Allow all on termine" on termine for all using (true) with check (true);
+create policy "Allow all on lernziele" on lernziele for all using (true) with check (true);
+create policy "Allow all on inhalte" on inhalte for all using (true) with check (true);
+create policy "Allow all on voraussetzungen" on voraussetzungen for all using (true) with check (true);
+
+create index idx_lernziele_workshop_id on lernziele(workshop_id);
+create index idx_inhalte_workshop_id on inhalte(workshop_id);
+create index idx_voraussetzungen_workshop_id on voraussetzungen(workshop_id);
 
 -- Flat view for JetEngine listings: one row per Durchführung
 create or replace view durchfuehrungen_flat as

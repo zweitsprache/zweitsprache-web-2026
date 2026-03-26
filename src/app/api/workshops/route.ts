@@ -10,7 +10,23 @@ export async function GET() {
     .select(`
       id,
       title,
+      about,
       created_at,
+      lernziele (
+        id,
+        text,
+        sort_order
+      ),
+      inhalte (
+        id,
+        text,
+        sort_order
+      ),
+      voraussetzungen (
+        id,
+        text,
+        sort_order
+      ),
       durchfuehrungen (
         id,
         created_at,

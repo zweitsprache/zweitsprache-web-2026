@@ -2,7 +2,14 @@ import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { CreateDurchfuehrungForm } from './create-durchfuehrung-form'
+import { CreateRepeatableForm } from './create-repeatable-form'
 import { DurchfuehrungCard } from './durchfuehrung-card'
+import { RepeatableRow } from './repeatable-row'
+import {
+  createLernziel, updateLernziel, deleteLernziel,
+  createInhalt, updateInhalt, deleteInhalt,
+  createVoraussetzung, updateVoraussetzung, deleteVoraussetzung,
+} from '../actions'
 
 export default async function WorkshopDetailPage({
   params,
@@ -29,6 +36,24 @@ export default async function WorkshopDetailPage({
     .eq('workshop_id', id)
     .order('created_at', { ascending: true })
 
+  const { data: lernziele } = await supabase
+    .from('lernziele')
+    .select('*')
+    .eq('workshop_id', id)
+    .order('sort_order', { ascending: true })
+
+  const { data: inhalte } = await supabase
+    .from('inhalte')
+    .select('*')
+    .eq('workshop_id', id)
+    .order('sort_order', { ascending: true })
+
+  const { data: voraussetzungen } = await supabase
+    .from('voraussetzungen')
+    .select('*')
+    .eq('workshop_id', id)
+    .order('sort_order', { ascending: true })
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <a
@@ -50,6 +75,75 @@ export default async function WorkshopDetailPage({
         <p className="mb-6 -mt-4 text-sm text-zinc-500">{workshop.subtitle}</p>
       )}
 
+      {workshop.about && (
+        <div className="mb-6 rounded-md bg-zinc-50 p-4 text-sm text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 whitespace-pre-wrap">
+          {workshop.about}
+        </div>
+      )}
+
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-2">Lernziele</h2>
+        <div className="mb-2 flex flex-col gap-2">
+          {lernziele && lernziele.length > 0 ? (
+            lernziele.map((lz) => (
+              <RepeatableRow
+                key={lz.id}
+                id={lz.id}
+                workshopId={id}
+                text={lz.text}
+                onUpdate={updateLernziel}
+                onDelete={deleteLernziel}
+              />
+            ))
+          ) : (
+            <p className="text-sm text-zinc-500">Noch keine Lernziele vorhanden.</p>
+          )}
+        </div>
+        <CreateRepeatableForm workshopId={id} placeholder="Neues Lernziel..." onCreate={createLernziel} />
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-2">Inhalte</h2>
+        <div className="mb-2 flex flex-col gap-2">
+          {inhalte && inhalte.length > 0 ? (
+            inhalte.map((item) => (
+              <RepeatableRow
+                key={item.id}
+                id={item.id}
+                workshopId={id}
+                text={item.text}
+                onUpdate={updateInhalt}
+                onDelete={deleteInhalt}
+              />
+            ))
+          ) : (
+            <p className="text-sm text-zinc-500">Noch keine Inhalte vorhanden.</p>
+          )}
+        </div>
+        <CreateRepeatableForm workshopId={id} placeholder="Neuer Inhalt..." onCreate={createInhalt} />
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-2">Voraussetzungen</h2>
+        <div className="mb-2 flex flex-col gap-2">
+          {voraussetzungen && voraussetzungen.length > 0 ? (
+            voraussetzungen.map((item) => (
+              <RepeatableRow
+                key={item.id}
+                id={item.id}
+                workshopId={id}
+                text={item.text}
+                onUpdate={updateVoraussetzung}
+                onDelete={deleteVoraussetzung}
+              />
+            ))
+          ) : (
+            <p className="text-sm text-zinc-500">Noch keine Voraussetzungen vorhanden.</p>
+          )}
+        </div>
+        <CreateRepeatableForm workshopId={id} placeholder="Neue Voraussetzung..." onCreate={createVoraussetzung} />
+      </div>
+
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Durchführungen</h2>
       </div>
@@ -66,6 +160,7 @@ export default async function WorkshopDetailPage({
               id={df.id}
               workshopId={id}
               index={i + 1}
+              ort={df.ort ?? null}
               termine={(df.termine ?? []).sort(
                 (a: { start_datetime: string }, b: { start_datetime: string }) =>
                   new Date(a.start_datetime).getTime() - new Date(b.start_datetime).getTime()

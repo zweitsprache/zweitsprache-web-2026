@@ -31,13 +31,14 @@ export async function updateWorkshop(id: string, formData: FormData) {
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
+  const about = formData.get('about') as string
   if (!title?.trim()) {
     return { error: 'Title is required' }
   }
 
   const { error } = await supabase
     .from('workshops')
-    .update({ title: title.trim(), subtitle: subtitle?.trim() || null })
+    .update({ title: title.trim(), subtitle: subtitle?.trim() || null, about: about?.trim() || null })
     .eq('id', id)
 
   if (error) {
@@ -83,6 +84,21 @@ export async function deleteDurchfuehrung(id: string, workshopId: string) {
   const supabase = createClient(cookieStore)
 
   const { error } = await supabase.from('durchfuehrungen').delete().eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function updateDurchfuehrungOrt(id: string, workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const ort = formData.get('ort') as string
+
+  const { error } = await supabase.from('durchfuehrungen').update({ ort }).eq('id', id)
 
   if (error) {
     return { error: error.message }
@@ -155,6 +171,202 @@ export async function deleteTermin(id: string, workshopId: string) {
   const supabase = createClient(cookieStore)
 
   const { error } = await supabase.from('termine').delete().eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function createLernziel(workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  // Get the next sort_order
+  const { data: existing } = await supabase
+    .from('lernziele')
+    .select('sort_order')
+    .eq('workshop_id', workshopId)
+    .order('sort_order', { ascending: false })
+    .limit(1)
+
+  const nextOrder = existing && existing.length > 0 ? existing[0].sort_order + 1 : 0
+
+  const { error } = await supabase.from('lernziele').insert({
+    workshop_id: workshopId,
+    text: text.trim(),
+    sort_order: nextOrder,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function updateLernziel(id: string, workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  const { error } = await supabase
+    .from('lernziele')
+    .update({ text: text.trim() })
+    .eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function deleteLernziel(id: string, workshopId: string) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.from('lernziele').delete().eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function createInhalt(workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  const { data: existing } = await supabase
+    .from('inhalte')
+    .select('sort_order')
+    .eq('workshop_id', workshopId)
+    .order('sort_order', { ascending: false })
+    .limit(1)
+
+  const nextOrder = existing && existing.length > 0 ? existing[0].sort_order + 1 : 0
+
+  const { error } = await supabase.from('inhalte').insert({
+    workshop_id: workshopId,
+    text: text.trim(),
+    sort_order: nextOrder,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function updateInhalt(id: string, workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  const { error } = await supabase
+    .from('inhalte')
+    .update({ text: text.trim() })
+    .eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function deleteInhalt(id: string, workshopId: string) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.from('inhalte').delete().eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function createVoraussetzung(workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  const { data: existing } = await supabase
+    .from('voraussetzungen')
+    .select('sort_order')
+    .eq('workshop_id', workshopId)
+    .order('sort_order', { ascending: false })
+    .limit(1)
+
+  const nextOrder = existing && existing.length > 0 ? existing[0].sort_order + 1 : 0
+
+  const { error } = await supabase.from('voraussetzungen').insert({
+    workshop_id: workshopId,
+    text: text.trim(),
+    sort_order: nextOrder,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function updateVoraussetzung(id: string, workshopId: string, formData: FormData) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const text = formData.get('text') as string
+  if (!text?.trim()) {
+    return { error: 'Text ist erforderlich' }
+  }
+
+  const { error } = await supabase
+    .from('voraussetzungen')
+    .update({ text: text.trim() })
+    .eq('id', id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath(`/admin/workshops/${workshopId}`)
+}
+
+export async function deleteVoraussetzung(id: string, workshopId: string) {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.from('voraussetzungen').delete().eq('id', id)
 
   if (error) {
     return { error: error.message }
