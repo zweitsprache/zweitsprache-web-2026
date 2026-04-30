@@ -332,7 +332,7 @@ export function AnmeldeForm({
       <div>
         <button
           type="submit"
-          className="w-full rounded-lg bg-zinc-900 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-100 sm:w-auto"
+          className="w-full rounded-lg bg-[#3E5A6B] px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#334d5b] focus:outline-none focus:ring-2 focus:ring-[#3E5A6B] focus:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-100 sm:w-auto"
         >
           Anmeldung absenden
         </button>

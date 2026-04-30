@@ -1,13 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 export async function createWorkshop(formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
@@ -26,8 +24,7 @@ export async function createWorkshop(formData: FormData) {
 }
 
 export async function updateWorkshop(id: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
@@ -51,8 +48,7 @@ export async function updateWorkshop(id: string, formData: FormData) {
 }
 
 export async function deleteWorkshop(id: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('workshops').delete().eq('id', id)
 
@@ -65,8 +61,7 @@ export async function deleteWorkshop(id: string) {
 }
 
 export async function createDurchfuehrung(workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('durchfuehrungen').insert({
     workshop_id: workshopId,
@@ -80,8 +75,7 @@ export async function createDurchfuehrung(workshopId: string) {
 }
 
 export async function deleteDurchfuehrung(id: string, workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('durchfuehrungen').delete().eq('id', id)
 
@@ -93,8 +87,7 @@ export async function deleteDurchfuehrung(id: string, workshopId: string) {
 }
 
 export async function updateDurchfuehrungOrt(id: string, workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const ort = formData.get('ort') as string
 
@@ -108,8 +101,7 @@ export async function updateDurchfuehrungOrt(id: string, workshopId: string, for
 }
 
 export async function createTermin(durchfuehrungId: string, workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const date = formData.get('date') as string
   const startTime = formData.get('start_time') as string
@@ -140,8 +132,7 @@ export async function updateTermin(
   workshopId: string,
   formData: FormData
 ) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const date = formData.get('date') as string
   const startTime = formData.get('start_time') as string
@@ -167,8 +158,7 @@ export async function updateTermin(
 }
 
 export async function deleteTermin(id: string, workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('termine').delete().eq('id', id)
 
@@ -180,8 +170,7 @@ export async function deleteTermin(id: string, workshopId: string) {
 }
 
 export async function createLernziel(workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -212,8 +201,7 @@ export async function createLernziel(workshopId: string, formData: FormData) {
 }
 
 export async function updateLernziel(id: string, workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -233,8 +221,7 @@ export async function updateLernziel(id: string, workshopId: string, formData: F
 }
 
 export async function deleteLernziel(id: string, workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('lernziele').delete().eq('id', id)
 
@@ -246,8 +233,7 @@ export async function deleteLernziel(id: string, workshopId: string) {
 }
 
 export async function createInhalt(workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -277,8 +263,7 @@ export async function createInhalt(workshopId: string, formData: FormData) {
 }
 
 export async function updateInhalt(id: string, workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -298,8 +283,7 @@ export async function updateInhalt(id: string, workshopId: string, formData: For
 }
 
 export async function deleteInhalt(id: string, workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('inhalte').delete().eq('id', id)
 
@@ -311,8 +295,7 @@ export async function deleteInhalt(id: string, workshopId: string) {
 }
 
 export async function createVoraussetzung(workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -342,8 +325,7 @@ export async function createVoraussetzung(workshopId: string, formData: FormData
 }
 
 export async function updateVoraussetzung(id: string, workshopId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -363,8 +345,7 @@ export async function updateVoraussetzung(id: string, workshopId: string, formDa
 }
 
 export async function deleteVoraussetzung(id: string, workshopId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('voraussetzungen').delete().eq('id', id)
 

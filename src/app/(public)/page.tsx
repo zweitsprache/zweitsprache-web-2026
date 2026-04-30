@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import Image from "next/image";
+import { HeroImage } from "./hero-image";
 
 const WEEKDAYS_DE = ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'];
 
@@ -58,46 +59,36 @@ export default async function HomePage() {
     return getFirstStart(a) - getFirstStart(b);
   });
 
-  const { data: courses } = await supabase
+  const { data: courses, error: coursesError } = await supabase
     .from("courses")
-    .select(
-      `
-      id,
-      title,
-      subtitle,
-      modules (
-        id,
-        lessons (id)
-      )
-    `
-    )
+    .select("id, title, subtitle")
     .eq("published", true)
     .order("created_at", { ascending: false })
     .limit(3);
 
+  if (coursesError) console.error("courses error:", coursesError.message, coursesError.code, coursesError.details, coursesError.hint);
+
   return (
     <div>
       {/* Hero */}
-      <div className="mx-auto max-w-6xl px-4 pt-12">
-        <div className="relative h-80 overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 sm:h-96">
-          <Image
-            src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
-            alt="DaZ einfach machen"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 flex flex-col items-start justify-center bg-black/60 p-8 sm:p-12">
-            <h1 className="text-5xl font-bold text-white sm:text-6xl">
-              DaZ einfach machen
-            </h1>
-            <p className="mt-4 text-2xl leading-snug text-zinc-200 sm:text-3xl sm:leading-snug">
-              Beratung, Weiterbildung und Fachcoaching<br /> für Organisationen, Teams und Kursleitende
-            </p>
+      <div className="mx-auto max-w-7xl px-4 pt-12">
+        <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800">
+          <HeroImage />
+          <div className="absolute inset-0 bg-black/45" />
+          <div className="absolute inset-0 flex flex-col items-start justify-end">
+            <div className="rounded-tr-xl px-16 pb-24 pt-6">
+              <h1 className="text-[2.75rem] font-black text-white sm:text-5xl">
+                DaZ einfach machen
+              </h1>
+              <p className="mt-4 text-2xl leading-normal text-white sm:text-3xl sm:leading-normal">
+                Beratung, Weiterbildung und Fachcoaching für<br />Organisationen, Teams und Kursleitende
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-7xl px-4 py-12">
         {/* Nächste Workshops */}
         <div className="mb-16">
           <div className="mb-6 flex items-center justify-between">
@@ -130,25 +121,29 @@ export default async function HomePage() {
                   href={`/workshops/${workshop.id}`}
                   className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
                 >
-                  <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800">
+                  <div className="relative aspect-[21/9] bg-zinc-100 dark:bg-zinc-800">
                     <Image
                       src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
                       alt={workshop.title}
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-4">
-                      <h3 className="text-lg font-semibold text-white group-hover:underline">
-                        {workshop.title}
-                      </h3>
-                      {workshop.subtitle && (
-                        <p className="mt-0.5 text-sm text-zinc-200">{workshop.subtitle}</p>
-                      )}
+                    <div className="absolute inset-0 flex flex-col justify-end">
+                      <div className="bg-white/80 px-4 py-2">
+                        <h3 className="text-lg font-bold text-[#3E5A6B]">
+                          {workshop.title}
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-4">
+                  <div className="px-4 pb-4 pt-2">
+                    {workshop.subtitle && (
+                      <p className="text-[18px] text-[#3E5A6B]">
+                        {workshop.subtitle}
+                      </p>
+                    )}
                     {nextTermin ? (
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      <p className="text-[18px] text-zinc-600 dark:text-zinc-400">
                         {formatDate(nextTermin.start_datetime)} |{" "}
                         {formatTime(nextTermin.start_datetime)} –{" "}
                         {formatTime(nextTermin.end_datetime)}
@@ -156,10 +151,7 @@ export default async function HomePage() {
                     ) : (
                       <p className="text-sm text-zinc-400">Keine kommenden Termine</p>
                     )}
-                    <p className="mt-2 text-xs text-zinc-400">
-                      {dfCount} Durchführung{dfCount !== 1 ? "en" : ""}
-                    </p>
-                    <span className="mt-3 block rounded-md bg-zinc-900 px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
+                    <span className="mt-3 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
                       Details
                     </span>
                   </div>
@@ -186,41 +178,32 @@ export default async function HomePage() {
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => {
-                const moduleCount = (course.modules ?? []).length;
-                const lessonCount = (course.modules ?? []).reduce(
-                  (sum: number, mod: { lessons: { id: string }[] }) =>
-                    sum + (mod.lessons ?? []).length,
-                  0
-                );
-
                 return (
                   <Link
                     key={course.id}
                     href={`/kurse/${course.id}`}
                     className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
                   >
-                    <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800">
+                    <div className="relative aspect-[21/9] bg-zinc-100 dark:bg-zinc-800">
                       <Image
                         src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
                         alt={course.title}
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-4">
-                        <h3 className="text-lg font-semibold text-white group-hover:underline">
-                          {course.title}
-                        </h3>
-                        {course.subtitle && (
-                          <p className="mt-0.5 text-sm text-zinc-200">{course.subtitle}</p>
-                        )}
+                      <div className="absolute inset-0 flex flex-col justify-end">
+                        <div className="bg-white/80 px-4 py-3">
+                          <h3 className="text-lg font-bold text-[#3E5A6B]">
+                            {course.title}
+                          </h3>
+                          {course.subtitle && (
+                            <p className="text-sm text-[#3E5A6B]">{course.subtitle}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="p-4">
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {moduleCount} Modul{moduleCount !== 1 ? "e" : ""} · {lessonCount} Lektion
-                        {lessonCount !== 1 ? "en" : ""}
-                      </p>
-                      <span className="mt-3 block rounded-md bg-zinc-900 px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
+                      <span className="mt-3 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
                         Kurs ansehen
                       </span>
                     </div>

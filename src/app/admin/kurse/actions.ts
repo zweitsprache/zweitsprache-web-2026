@@ -1,15 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 // ─── Course ───
 
 export async function createCourse(formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
@@ -31,8 +29,7 @@ export async function createCourse(formData: FormData) {
 }
 
 export async function updateCourse(id: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
@@ -65,8 +62,7 @@ export async function updateCourse(id: string, formData: FormData) {
 }
 
 export async function deleteCourse(id: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('courses').delete().eq('id', id)
 
@@ -81,8 +77,7 @@ export async function deleteCourse(id: string) {
 // ─── Module ───
 
 export async function createModule(courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   if (!title?.trim()) {
@@ -112,8 +107,7 @@ export async function createModule(courseId: string, formData: FormData) {
 }
 
 export async function updateModule(id: string, courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const description = formData.get('description') as string
@@ -135,8 +129,7 @@ export async function updateModule(id: string, courseId: string, formData: FormD
 }
 
 export async function deleteModule(id: string, courseId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('modules').delete().eq('id', id)
 
@@ -150,8 +143,7 @@ export async function deleteModule(id: string, courseId: string) {
 // ─── Module Lernziele ───
 
 export async function createModuleLernziel(moduleId: string, courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -181,8 +173,7 @@ export async function createModuleLernziel(moduleId: string, courseId: string, f
 }
 
 export async function updateModuleLernziel(id: string, courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const text = formData.get('text') as string
   if (!text?.trim()) {
@@ -202,8 +193,7 @@ export async function updateModuleLernziel(id: string, courseId: string, formDat
 }
 
 export async function deleteModuleLernziel(id: string, courseId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('module_lernziele').delete().eq('id', id)
 
@@ -217,8 +207,7 @@ export async function deleteModuleLernziel(id: string, courseId: string) {
 // ─── Lesson ───
 
 export async function createLesson(moduleId: string, courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   if (!title?.trim()) {
@@ -249,8 +238,7 @@ export async function createLesson(moduleId: string, courseId: string, formData:
 }
 
 export async function updateLessonTitle(id: string, courseId: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   if (!title?.trim()) {
@@ -270,8 +258,7 @@ export async function updateLessonTitle(id: string, courseId: string, formData: 
 }
 
 export async function deleteLesson(id: string, courseId: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('lessons').delete().eq('id', id)
 

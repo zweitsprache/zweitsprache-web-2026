@@ -59,7 +59,7 @@ export default async function WorkshopsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-12">
       {/* Hero */}
       <div className="relative h-48 w-full overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-56 md:h-64">
         <Image
@@ -99,25 +99,27 @@ export default async function WorkshopsPage() {
               href={`/workshops/${workshop.id}`}
               className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
             >
-              <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800">
+              <div className="relative aspect-[21/9] bg-zinc-100 dark:bg-zinc-800">
                 <Image
                   src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
                   alt={workshop.title}
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <h2 className="text-lg font-semibold text-white group-hover:underline">
-                    {workshop.title}
-                  </h2>
-                  {workshop.subtitle && (
-                    <p className="mt-0.5 text-sm text-zinc-200">{workshop.subtitle}</p>
-                  )}
+                <div className="absolute inset-0 flex flex-col justify-end">
+                  <div className="bg-white/80 px-4 py-2">
+                    <h2 className="text-lg font-bold text-[#3E5A6B]">
+                      {workshop.title}
+                    </h2>
+                  </div>
                 </div>
               </div>
-              <div className="p-4">
+              <div className="px-4 pb-4 pt-2">
+              {workshop.subtitle && (
+                <p className="text-[18px] text-[#3E5A6B]">{workshop.subtitle}</p>
+              )}
               {nextTermin ? (
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-[18px] text-zinc-600 dark:text-zinc-400">
                   {formatDate(nextTermin.start_datetime)} |{" "}
                   {formatTime(nextTermin.start_datetime)} –{" "}
                   {formatTime(nextTermin.end_datetime)}
@@ -125,10 +127,7 @@ export default async function WorkshopsPage() {
               ) : (
                 <p className="text-sm text-zinc-400">Keine kommenden Termine</p>
               )}
-              <p className="mt-2 text-xs text-zinc-400">
-                {dfCount} Durchführung{dfCount !== 1 ? "en" : ""}
-              </p>
-              <span className="mt-3 block rounded-md bg-zinc-900 px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
+              <span className="mt-3 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
                 Details
               </span>
               </div>

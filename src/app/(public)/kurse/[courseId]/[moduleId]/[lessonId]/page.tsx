@@ -41,28 +41,21 @@ export default async function LessonPublicPage({
 
   const { data: allModules } = await supabase
     .from("modules")
-    .select(
-      `
-      id,
-      title,
-      sort_order,
-      lessons (
-        id,
-        title,
-        sort_order
-      )
-    `
-    )
+    .select("id, title, sort_order")
     .eq("course_id", courseId)
     .order("sort_order", { ascending: true });
 
+  const allModuleIds = (allModules ?? []).map((m) => m.id);
+  const { data: allModuleLessons } = allModuleIds.length > 0
+    ? await supabase.from("lessons").select("id, title, sort_order, module_id").in("module_id", allModuleIds)
+    : { data: [] };
+
   // Build flat ordered list of all lessons across all modules
   const flatLessons: { id: string; title: string; moduleId: string; moduleName: string }[] = [];
-  for (const m of allModules ?? []) {
-    const sorted = (m.lessons ?? []).sort(
-      (a: { sort_order: number }, b: { sort_order: number }) =>
-        a.sort_order - b.sort_order
-    );
+  for (const m of (allModules ?? []).sort((a, b) => a.sort_order - b.sort_order)) {
+    const sorted = (allModuleLessons ?? [])
+      .filter((l) => l.module_id === m.id)
+      .sort((a, b) => a.sort_order - b.sort_order);
     for (const l of sorted) {
       flatLessons.push({
         id: l.id,

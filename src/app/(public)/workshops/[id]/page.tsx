@@ -105,7 +105,7 @@ export default async function WorkshopPublicPage({
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-12">
       {/* Hero */}
       <div className="relative h-48 w-full overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-56 md:h-64">
         <Image
@@ -259,7 +259,7 @@ export default async function WorkshopPublicPage({
                   <div className="mt-3">
                     <Link
                       href={`/workshops/${id}/anmelden/${df.id}`}
-                      className="inline-flex w-full items-center justify-center rounded-md bg-zinc-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                      className="inline-flex w-full items-center justify-center rounded-md bg-[#3E5A6B] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
                     >
                       Anmelden
                     </Link>

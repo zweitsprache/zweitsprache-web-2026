@@ -1,9 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 const RESERVED_SLUGS = ['angebote', 'admin', 'api']
 
@@ -16,8 +15,7 @@ function slugify(text: string): string {
 }
 
 export async function createPage(formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   const slugInput = formData.get('slug') as string
@@ -54,8 +52,7 @@ export async function createPage(formData: FormData) {
 }
 
 export async function updatePageMeta(slug: string, formData: FormData) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const title = formData.get('title') as string
   if (!title?.trim()) {
@@ -76,8 +73,7 @@ export async function updatePageMeta(slug: string, formData: FormData) {
 }
 
 export async function togglePublish(slug: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { data: page } = await supabase
     .from('pages')
@@ -103,8 +99,7 @@ export async function togglePublish(slug: string) {
 }
 
 export async function deletePage(slug: string) {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createAdminClient()
 
   const { error } = await supabase.from('pages').delete().eq('slug', slug)
 

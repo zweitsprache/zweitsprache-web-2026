@@ -26,37 +26,29 @@ export default async function CourseOverviewPage({
 
   const { data: modules } = await supabase
     .from("modules")
-    .select(
-      `
-      id,
-      title,
-      description,
-      sort_order,
-      module_lernziele (
-        id,
-        text,
-        sort_order
-      ),
-      lessons (
-        id,
-        title,
-        sort_order
-      )
-    `
-    )
+    .select("id, title, description, sort_order")
     .eq("course_id", courseId)
     .order("sort_order", { ascending: true });
 
+  const moduleIds = (modules ?? []).map((m) => m.id);
+
+  const [{ data: allLessons }, { data: allLernziele }] = await Promise.all([
+    moduleIds.length > 0
+      ? supabase.from("lessons").select("id, title, sort_order, module_id").in("module_id", moduleIds)
+      : Promise.resolve({ data: [] }),
+    moduleIds.length > 0
+      ? supabase.from("module_lernziele").select("id, text, sort_order, module_id").in("module_id", moduleIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+
   const sortedModules = (modules ?? []).map((mod) => ({
     ...mod,
-    module_lernziele: (mod.module_lernziele ?? []).sort(
-      (a: { sort_order: number }, b: { sort_order: number }) =>
-        a.sort_order - b.sort_order
-    ),
-    lessons: (mod.lessons ?? []).sort(
-      (a: { sort_order: number }, b: { sort_order: number }) =>
-        a.sort_order - b.sort_order
-    ),
+    lessons: (allLessons ?? [])
+      .filter((l) => l.module_id === mod.id)
+      .sort((a, b) => a.sort_order - b.sort_order),
+    module_lernziele: (allLernziele ?? [])
+      .filter((lz) => lz.module_id === mod.id)
+      .sort((a, b) => a.sort_order - b.sort_order),
   }));
 
   return (
@@ -136,7 +128,7 @@ export default async function CourseOverviewPage({
       {sortedModules.length > 0 && sortedModules[0].lessons.length > 0 && (
         <Link
           href={`/kurse/${courseId}/${sortedModules[0].id}/${sortedModules[0].lessons[0].id}`}
-          className="inline-flex items-center gap-2 rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="inline-flex items-center gap-2 rounded-md bg-[#3E5A6B] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
         >
           <BookOpen className="h-4 w-4" />
           Kurs starten

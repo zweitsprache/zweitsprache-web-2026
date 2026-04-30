@@ -28,31 +28,24 @@ export default async function CourseLayout({
 
   const { data: modules } = await supabase
     .from("modules")
-    .select(
-      `
-      id,
-      title,
-      sort_order,
-      lessons (
-        id,
-        title,
-        sort_order
-      )
-    `
-    )
+    .select("id, title, sort_order")
     .eq("course_id", courseId)
     .order("sort_order", { ascending: true });
 
+  const moduleIds = (modules ?? []).map((m) => m.id);
+  const { data: lessons } = moduleIds.length > 0
+    ? await supabase.from("lessons").select("id, title, sort_order, module_id").in("module_id", moduleIds)
+    : { data: [] };
+
   const sortedModules = (modules ?? []).map((mod) => ({
     ...mod,
-    lessons: (mod.lessons ?? []).sort(
-      (a: { sort_order: number }, b: { sort_order: number }) =>
-        a.sort_order - b.sort_order
-    ),
+    lessons: (lessons ?? [])
+      .filter((l) => l.module_id === mod.id)
+      .sort((a, b) => a.sort_order - b.sort_order),
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
+    <div className="mx-auto max-w-7xl px-4 py-8">
       <Link
         href="/kurse"
         className="mb-4 inline-block text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
