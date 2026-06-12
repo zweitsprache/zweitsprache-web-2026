@@ -107,46 +107,56 @@ export default async function WorkshopPublicPage({
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
       {/* Hero */}
-      <div className="relative h-48 w-full overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-56 md:h-64">
-        <Image
-          src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
-          alt={workshop.title}
-          fill
-          className="object-cover"
-        />
-        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-black/20 p-6 sm:p-8">
-            <Link
-              href="/workshops"
-              className="mb-4 inline-block text-sm text-zinc-300 hover:text-white"
-            >
-              ← Alle Workshops
-            </Link>
-            <h1 className="text-3xl font-bold text-white sm:text-4xl">
-              {workshop.title}
-            </h1>
-            {workshop.subtitle && (
-              <p className="mt-2 text-lg text-zinc-200">{workshop.subtitle}</p>
-            )}
+      <div className="relative overflow-hidden rounded-2xl bg-[#c8553d] px-6 py-8 sm:px-10 sm:py-10">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-10 -top-16 select-none text-[10rem] font-black uppercase leading-none tracking-tighter text-white/10 sm:text-[14rem]"
+        >
+          DaZ
+        </span>
+        <div className="pointer-events-none absolute -bottom-16 -right-16 opacity-30">
+          <Image
+            src="/logos/ZWE_Logo_2026_V01_circle.svg"
+            alt=""
+            aria-hidden="true"
+            width={320}
+            height={320}
+            className="h-40 w-40 sm:h-56 sm:w-56"
+          />
+        </div>
+        <div className="relative z-10 max-w-3xl">
+          <Link
+            href="/workshops"
+            className="mb-5 inline-block rounded-full border border-white/40 px-4 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/85 transition-colors hover:bg-white/10"
+          >
+            ← Alle Workshops
+          </Link>
+          <h1 className="text-4xl font-black leading-[0.95] tracking-tight text-white sm:text-6xl">
+            {workshop.title}
+          </h1>
+          {workshop.subtitle && (
+            <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">{workshop.subtitle}</p>
+          )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-10 py-12 lg:grid-cols-3">
         {/* Left column (2/3) */}
-        <div className="lg:col-span-2">
+        <div className="space-y-6 lg:col-span-2">
       {workshop.about && (
-        <div className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">Über den Workshop</h2>
-          <p className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">{workshop.about}</p>
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 dark:border-stone-800 dark:bg-stone-900">
+          <h2 className="mb-4 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Über den Workshop</h2>
+          <p className="whitespace-pre-wrap text-stone-700 dark:text-stone-300">{workshop.about}</p>
         </div>
       )}
       {lernziele.length > 0 && (
-        <div className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">Lernziele</h2>
-          <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 dark:border-stone-800 dark:bg-stone-900">
+          <h2 className="mb-4 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Lernziele</h2>
+          <ul className="divide-y divide-stone-200 dark:divide-stone-800">
             {lernziele.map((lz: { id: string; text: string }) => (
-              <li key={lz.id} className="flex items-center gap-3 py-3 text-zinc-700 dark:text-zinc-300">
-                <ArrowRight className="h-4 w-4 shrink-0" />
+              <li key={lz.id} className="flex items-center gap-3 py-3 text-stone-700 dark:text-stone-300">
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#c8553d]" />
                 {lz.text}
               </li>
             ))}
@@ -154,12 +164,12 @@ export default async function WorkshopPublicPage({
         </div>
       )}
       {inhalte.length > 0 && (
-        <div className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">Inhalte</h2>
-          <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 dark:border-stone-800 dark:bg-stone-900">
+          <h2 className="mb-4 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Inhalte</h2>
+          <ul className="divide-y divide-stone-200 dark:divide-stone-800">
             {inhalte.map((item: { id: string; text: string }) => (
-              <li key={item.id} className="flex items-center gap-3 py-3 text-zinc-700 dark:text-zinc-300">
-                <ArrowRight className="h-4 w-4 shrink-0" />
+              <li key={item.id} className="flex items-center gap-3 py-3 text-stone-700 dark:text-stone-300">
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#c8553d]" />
                 {item.text}
               </li>
             ))}
@@ -167,12 +177,12 @@ export default async function WorkshopPublicPage({
         </div>
       )}
       {voraussetzungen.length > 0 && (
-        <div className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">Voraussetzungen</h2>
-          <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 dark:border-stone-800 dark:bg-stone-900">
+          <h2 className="mb-4 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Voraussetzungen</h2>
+          <ul className="divide-y divide-stone-200 dark:divide-stone-800">
             {voraussetzungen.map((item: { id: string; text: string }) => (
-              <li key={item.id} className="flex items-center gap-3 py-3 text-zinc-700 dark:text-zinc-300">
-                <ArrowRight className="h-4 w-4 shrink-0" />
+              <li key={item.id} className="flex items-center gap-3 py-3 text-stone-700 dark:text-stone-300">
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#c8553d]" />
                 {item.text}
               </li>
             ))}
@@ -183,9 +193,9 @@ export default async function WorkshopPublicPage({
 
         {/* Right column (1/3) */}
         <div>
-      <h2 className="mb-4 text-xl font-semibold">Nächste Termine</h2>
+      <h2 className="mb-4 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Nächste Termine</h2>
       {durchfuehrungen.length === 0 ? (
-        <p className="text-zinc-500">
+        <p className="text-stone-500 dark:text-stone-400">
           Für diesen Workshop sind noch keine Durchführungen geplant.
         </p>
       ) : (
@@ -200,54 +210,50 @@ export default async function WorkshopPublicPage({
                   start_datetime: string;
                   end_datetime: string;
                 }[];
-              },
-              i: number
+              }
             ) => {
               const upcoming = df.termine.filter(
                 (t) => new Date(t.start_datetime) >= new Date()
-              );
-              const past = df.termine.filter(
-                (t) => new Date(t.start_datetime) < new Date()
               );
 
               return (
                 <div
                   key={df.id}
-                  className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800"
+                  className="rounded-xl border border-stone-200 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-900"
                 >
                   {df.termine.length === 0 ? (
-                    <p className="text-sm text-zinc-400">Keine Termine</p>
+                    <p className="text-sm text-stone-400">Keine Termine</p>
                   ) : (
                     <div className="flex flex-col gap-2">
                       {upcoming.map((t) => (
                         <div key={t.id} className="flex flex-col gap-1">
-                          <div className="flex items-center gap-3 rounded-md bg-zinc-50 px-3 py-2 text-base dark:bg-zinc-900">
-                            <Calendar className="h-4 w-4 shrink-0 text-zinc-400" />
+                          <div className="flex items-center gap-3 rounded-md bg-white px-3 py-2 text-base dark:bg-stone-950">
+                            <Calendar className="h-4 w-4 shrink-0 text-[#c8553d]" />
                             <span className="font-bold">
                               {formatDate(t.start_datetime)}
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 rounded-md bg-zinc-50 px-3 py-2 text-base dark:bg-zinc-900">
-                            <Clock8 className="h-4 w-4 shrink-0 text-zinc-400" />
-                            <span className="text-zinc-500">
+                          <div className="flex items-center gap-3 rounded-md bg-white px-3 py-2 text-base dark:bg-stone-950">
+                            <Clock8 className="h-4 w-4 shrink-0 text-[#c8553d]" />
+                            <span className="text-stone-600 dark:text-stone-400">
                               {formatTime(t.start_datetime)} – {formatTime(t.end_datetime)}
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 rounded-md bg-zinc-50 px-3 py-2 text-base dark:bg-zinc-900">
-                            <MapPin className="h-4 w-4 shrink-0 text-zinc-400" />
-                            <span className="text-zinc-500">
+                          <div className="flex items-center gap-3 rounded-md bg-white px-3 py-2 text-base dark:bg-stone-950">
+                            <MapPin className="h-4 w-4 shrink-0 text-[#c8553d]" />
+                            <span className="text-stone-600 dark:text-stone-400">
                               {df.ort || '\u00A0'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 rounded-md bg-zinc-50 px-3 py-2 text-base dark:bg-zinc-900">
-                            <User className="h-4 w-4 shrink-0 text-zinc-400" />
-                            <span className="text-zinc-500">
+                          <div className="flex items-center gap-3 rounded-md bg-white px-3 py-2 text-base dark:bg-stone-950">
+                            <User className="h-4 w-4 shrink-0 text-[#c8553d]" />
+                            <span className="text-stone-600 dark:text-stone-400">
                               &nbsp;
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 rounded-md bg-zinc-50 px-3 py-2 text-base dark:bg-zinc-900">
-                            <CreditCard className="h-4 w-4 shrink-0 text-zinc-400" />
-                            <span className="text-zinc-500">
+                          <div className="flex items-center gap-3 rounded-md bg-white px-3 py-2 text-base dark:bg-stone-950">
+                            <CreditCard className="h-4 w-4 shrink-0 text-[#c8553d]" />
+                            <span className="text-stone-600 dark:text-stone-400">
                               &nbsp;
                             </span>
                           </div>
@@ -259,7 +265,7 @@ export default async function WorkshopPublicPage({
                   <div className="mt-3">
                     <Link
                       href={`/workshops/${id}/anmelden/${df.id}`}
-                      className="inline-flex w-full items-center justify-center rounded-md bg-[#3E5A6B] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                      className="inline-flex w-full items-center justify-center rounded-md bg-[#3E5A6B] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#334d5b] dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200"
                     >
                       Anmelden
                     </Link>
@@ -271,19 +277,19 @@ export default async function WorkshopPublicPage({
         </div>
       )}
 
-      <div className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800">
-        <p className="mb-3 text-base text-zinc-700 dark:text-zinc-300">
+      <div className="rounded-xl border border-stone-200 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-900">
+        <p className="mb-3 text-base text-stone-700 dark:text-stone-300">
           Dieser Workshop ist auch als Inhouse-Veranstaltung durchführbar.
         </p>
         <Link
           href={`/workshops/${id}/anmelden/${durchfuehrungen[0]?.id ?? ''}`}
-          className="inline-flex w-full items-center justify-center rounded-md bg-zinc-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="inline-flex w-full items-center justify-center rounded-md bg-stone-900 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200"
         >
           Anfrage
         </Link>
       </div>
 
-      <h2 className="mt-8 text-xl font-semibold">Teilnehmer:innen-Stimmen</h2>
+      <h2 className="mt-8 text-xl font-black tracking-tight text-stone-900 dark:text-stone-100">Teilnehmer:innen-Stimmen</h2>
         </div>
       </div>
     </div>

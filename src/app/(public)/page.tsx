@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import Image from "next/image";
-import { HeroImage } from "./hero-image";
 
 const WEEKDAYS_DE = ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'];
 
@@ -72,16 +70,27 @@ export default async function HomePage() {
     <div>
       {/* Hero */}
       <div className="mx-auto max-w-7xl px-4 pt-12">
-        <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800">
-          <HeroImage />
-          <div className="absolute inset-0 bg-black/45" />
-          <div className="absolute inset-0 flex flex-col items-start justify-end">
-            <div className="rounded-tr-xl px-16 pb-24 pt-6">
-              <h1 className="text-[2.75rem] font-black text-white sm:text-5xl">
-                DaZ einfach machen
+        <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-[#0b1f3b]">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-22 -top-22 z-10 h-56 w-56 rounded-full border-2 border-white/80 bg-stone-50"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-20 -top-20 z-10 h-48 w-48 rounded-full border border-white/75 bg-[#c8553d]"
+          />
+          {/* Content */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-between p-10 sm:p-14">
+            <div />
+            <div>
+              <p className="mb-5 max-w-3xl text-xl font-medium leading-snug text-white/80 sm:text-2xl md:text-3xl">
+                zweitsprache.ch | Marcel Allenspach
+              </p>
+              <h1 className="text-[2.6rem] font-black leading-none tracking-tight text-white sm:text-6xl md:text-7xl">
+                DaZ einfach machen.
               </h1>
-              <p className="mt-4 text-2xl leading-normal text-white sm:text-3xl sm:leading-normal">
-                Beratung, Weiterbildung und Fachcoaching für<br />Organisationen, Teams und Kursleitende
+              <p className="mt-5 max-w-3xl text-xl font-medium leading-snug text-white/80 sm:text-2xl md:text-3xl">
+                Beratung, Weiterbildung und Fachcoaching für Organisationen, Teams und Kursleitende
               </p>
             </div>
           </div>
@@ -119,41 +128,49 @@ export default async function HomePage() {
                 <Link
                   key={workshop.id}
                   href={`/workshops/${workshop.id}`}
-                  className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
+                  className="group relative overflow-hidden rounded-lg bg-stone-50 transition-colors dark:bg-stone-900"
                 >
-                  <div className="relative aspect-[21/9] bg-zinc-100 dark:bg-zinc-800">
-                    <Image
-                      src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
-                      alt={workshop.title}
-                      fill
-                      className="object-cover"
+                  <div className="relative overflow-hidden bg-[#c8553d] px-5 py-5">
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -bottom-6 left-1/2 h-12 w-12 -translate-x-1/2 rounded-full bg-stone-50 dark:bg-stone-900"
                     />
-                    <div className="absolute inset-0 flex flex-col justify-end">
-                      <div className="bg-white/80 px-4 py-2">
-                        <h3 className="text-lg font-bold text-[#3E5A6B]">
-                          {workshop.title}
-                        </h3>
-                      </div>
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -bottom-4 left-1/2 h-8 w-8 -translate-x-1/2 rounded-full bg-[#3E5A6B]"
+                    />
+                    <div className="relative z-20">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/80">
+                        Workshop
+                      </p>
+                      <h3 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-white">
+                        {workshop.title}
+                      </h3>
                     </div>
                   </div>
-                  <div className="px-4 pb-4 pt-2">
+                  <div className="space-y-3 rounded-b-lg border-x border-b border-stone-300 bg-stone-50 px-5 pb-5 pt-4 transition-colors group-hover:border-stone-500 dark:border-stone-700 dark:bg-stone-900 dark:group-hover:border-stone-500">
                     {workshop.subtitle && (
-                      <p className="text-[18px] text-[#3E5A6B]">
+                      <p className="text-base leading-snug text-stone-700 dark:text-stone-300">
                         {workshop.subtitle}
                       </p>
                     )}
                     {nextTermin ? (
-                      <p className="text-[18px] text-zinc-600 dark:text-zinc-400">
+                      <p className="text-sm font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-400">
                         {formatDate(nextTermin.start_datetime)} |{" "}
                         {formatTime(nextTermin.start_datetime)} –{" "}
                         {formatTime(nextTermin.end_datetime)}
                       </p>
                     ) : (
-                      <p className="text-sm text-zinc-400">Keine kommenden Termine</p>
+                      <p className="text-sm font-medium text-stone-400">Keine kommenden Termine</p>
                     )}
-                    <span className="mt-3 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="inline-flex items-center rounded-full border border-stone-300 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-stone-600 dark:border-stone-700 dark:text-stone-300">
+                        {dfCount} Termineinheiten
+                      </span>
+                      <span className="inline-flex items-center rounded-md bg-[#3E5A6B] px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#334d5b] dark:bg-stone-100 dark:text-stone-900 dark:group-hover:bg-stone-200">
                       Details
-                    </span>
+                      </span>
+                    </div>
                   </div>
                 </Link>
               );
@@ -182,28 +199,36 @@ export default async function HomePage() {
                   <Link
                     key={course.id}
                     href={`/kurse/${course.id}`}
-                    className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:hover:border-zinc-600"
+                    className="group relative overflow-hidden rounded-lg bg-stone-50 transition-colors dark:bg-stone-900"
                   >
-                    <div className="relative aspect-[21/9] bg-zinc-100 dark:bg-zinc-800">
-                      <Image
-                        src="/placeholders/nano-banana-2_artistic_portrait_photography_of_A_cool-toned_artistic_portrait_photography_feat-3.jpg"
-                        alt={course.title}
-                        fill
-                        className="object-cover"
+                    <div className="relative overflow-hidden bg-[#0b1f3b] px-5 py-5">
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-6 left-1/2 h-12 w-12 -translate-x-1/2 rounded-full bg-white"
                       />
-                      <div className="absolute inset-0 flex flex-col justify-end">
-                        <div className="bg-white/80 px-4 py-3">
-                          <h3 className="text-lg font-bold text-[#3E5A6B]">
-                            {course.title}
-                          </h3>
-                          {course.subtitle && (
-                            <p className="text-sm text-[#3E5A6B]">{course.subtitle}</p>
-                          )}
-                        </div>
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-4 left-1/2 h-8 w-8 -translate-x-1/2 rounded-full bg-[#c8553d]"
+                      />
+                      <div className="relative z-20">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/80">
+                          Online-Kurs
+                        </p>
+                        <h3 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-white">
+                          {course.title}
+                        </h3>
                       </div>
                     </div>
-                    <div className="p-4">
-                      <span className="mt-3 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-medium text-white group-hover:bg-[#334d5b] dark:bg-zinc-100 dark:text-zinc-900 dark:group-hover:bg-zinc-200">
+                    <div className="space-y-3 rounded-b-lg border-x border-b border-stone-300 bg-stone-50 px-5 pb-5 pt-4 transition-colors group-hover:border-stone-500 dark:border-stone-700 dark:bg-stone-900 dark:group-hover:border-stone-500">
+                      {course.subtitle && (
+                        <p className="text-base leading-snug text-stone-700 dark:text-stone-300">
+                          {course.subtitle}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center rounded-full border border-stone-300 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#3E5A6B] dark:border-stone-700 dark:text-stone-200">
+                        Selbstgesteuert lernen
+                      </span>
+                      <span className="mt-1 block rounded-md bg-[#3E5A6B] px-4 py-2 text-center text-sm font-semibold text-white transition-colors group-hover:bg-[#334d5b] dark:bg-stone-100 dark:text-stone-900 dark:group-hover:bg-stone-200">
                         Kurs ansehen
                       </span>
                     </div>

@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-encode-sans);
+  --font-sans: var(--font-fira-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -22,6 +22,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-fira-sans), sans-serif;
   font-size: 18px;
 }
