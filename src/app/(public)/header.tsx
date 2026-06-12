@@ -7,7 +7,7 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logos/zweitsprache_logo.svg"
+            src="/logos/ZWE_Logo_2026_V01.svg"
             alt="Zweitsprache"
             width={35}
             height={9}
@@ -20,6 +20,12 @@ export function Header() {
             className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             Workshops
+          </Link>
+          <Link
+            href="/ermoeglichungsdidaktik"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            Ermoeglichungsdidaktik
           </Link>
           <Link
             href="/kurse"
